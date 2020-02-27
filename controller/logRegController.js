@@ -1,5 +1,6 @@
 "use strict"
-const { User } = require('../m odels')
+const { User } = require('../models')
+const bcrypt = require('bcrypt')
 
 class LoginRegister {
 
@@ -8,22 +9,29 @@ class LoginRegister {
     }
 
     static login(req, res) {
-        let error = `Sorry you have not registered yet!`
+        // let error = `Sorry you have not registered yet!`
         const body = {
             username: req.body.username,
             password: req.body.password
         }
         User.findOne({ where: { username: body.username } })
-            .then(() => {
-                res.redirect('/home')
+            .then((user) => {
+                const password = req.body.password
+                bcrypt.compare(password, user.password)
+                    .then(pass => {
+                        req.session.user = {
+                            name: user.username
+                        }
+                        res.redirect('/movies')
+                    });
             })
-            .then(err => {
-                res.redirect(`/login?err=${error}`)
+            .cathch(err => {
+                res.redirect(`/login?err=${err.error}`)
             })
     }
 
     static formRegister(req, res) {
-        res.render('./login-register/login')
+        res.render('./login-register/register')
     }
     static register(req, res) {
         const body = {
