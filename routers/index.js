@@ -2,7 +2,6 @@ const express = require('express')
 const Router = express.Router()
 
 const PhotoController = require('../controllers/PhotoController')
-// const loginRegister = require('../controllers/logRegController')
 const UserController = require('../controllers/UserController')
 
 const checkLogin = (req, res, next) => {
@@ -32,6 +31,7 @@ Router.get('/photos/:photo_id/un-like', checkLogin, UserController.unLike)
 //Kurang add photo oleh user
 
 Router.get('/logout', (req, res) => {
+    console.log(req.session.user)
     req.session.destroy(function (err) {
         res.redirect('/home')
     })

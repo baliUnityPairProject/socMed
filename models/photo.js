@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Photo.init({
     link: DataTypes.STRING,
+    description: DataTypes.STRING,
     user_id: DataTypes.INTEGER
   }, {sequelize})
 

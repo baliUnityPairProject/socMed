@@ -1,5 +1,5 @@
+<%- include('parsials/header') %>
 <body>
-
 
     <style>
         * {
@@ -93,23 +93,30 @@
             color: #4CAF50;
         }
     </style>
-
-    <div class="form">
-        <h2>Login</h2>
-        <div class="input">
-            <div class="inputBox">
-                <label>Email</label>
-                <input type="text" placeholder="example@xyz.com">
+    <form method="POST" action="/login" style="padding: 40px 40px 120px;">
+        <div class="form">
+            <h2>Login</h2>
+            <% if(msg){ %>
+                <p style="color: red;"> <%= msg %> </p>
+            <% } %>
+            <div class="input">
+                <div class="inputBox">
+                    <label>Username</label>
+                    <input type="text" placeholder="example@xyz.com" name="username">
+                </div>
+                <div class="inputBox">
+                    <label>Password</label>
+                    <input type="password" placeholder="······" name="password">
+                </div>
+                <div class="inputBox">
+                    <input type="submit" value="Signin">
+                </div>
             </div>
-            <div class="inputBox">
-                <label>Password</label>
-                <input type="password" placeholder="······">
-            </div>
-            <div class="inputBox">
-                <input type="submit" value="Signin">
-            </div>
+            <p class="text-center" style="color:rgb(138, 149, 156); position: relative; top:20px;">Haven register yet???
+                <a href="/register">Signup</a></p>
         </div>
-        <p class="forget">Forgot Password? <a href="#">Click Here</a></p>
-    </div>
+    </form>
+    <form>
 
+    </form>
 </body>

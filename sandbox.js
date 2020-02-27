@@ -1,5 +1,5 @@
-// const bcrypt = require('bcrypt')
-// const saltRounds = 10;
+const bcrypt = require('bcrypt')
+const saltRounds = 10;
 // const password = 's0/\/\P4$$w0rD';
 
 // let seedData = [
@@ -32,14 +32,47 @@
 
 const { Photo, User, Like, Comment } = require('./models')
 
+// User.findOne({
+//   where: {
+//     "username": "abcde"
+//   }
+// })
+// .then( result => {
+//   console.log(result)
+// } )
+// .catch( err => {
+//   console.log('error')
+// } )
+
+let data_login = {
+  username: 'agunggst',
+  password: 'aaaa'
+}
 User.findOne({
-  where: {
-    "username": "abcde"
+  where:{
+      "username": data_login.username
   }
 })
 .then( result => {
-  console.log(result)
+  if(!result){
+      throw `Sorry you have not registered yet!`
+  }else{
+      return bcrypt.compare(data_login.password, result.password)
+  }
+} )
+.then( result => {
+  if(result){
+      let user = {
+          name: data_login.username
+      }
+      console.log(user)
+      //redirect ke home
+  }else{
+      throw 'Wrong Password'
+  }
 } )
 .catch( err => {
+  //send error ke login form
   console.log('error')
+  // res.send(err)
 } )

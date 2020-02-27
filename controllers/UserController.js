@@ -4,15 +4,16 @@ const Op = require('sequelize').Sequelize.Op
 
 class UserController {
     static registerForm(req, res){
-        res.render('register')
+        let msg = req.query.msg
+        res.render('register', { msg })
     }
 
     static register(req, res){
         let newData = {
-            username: req.body.username,
+            username: (req.body.username=='')?null:req.body.username,
             name: req.body.name,
-            password: req.body,
-            email: req.body.password,
+            password: req.body.password,
+            email: req.body.email,
             gender: req.body.gender,
         }
         User.create(newData)
@@ -21,12 +22,18 @@ class UserController {
         } )
         .catch( err => {
             //send error message berdasarkan error validation
-            res.send(err)
+            let err_msg = 'Username already taken'
+            res.redirect(`/register?msg=${err_msg}`)
         } )
     }
 
     static loginForm(req, res){
-        res.render('login')
+        let msg = req.query.msg
+        if(req.session.user){
+            res.send('harus logout dulu yaa')
+        }else{
+            res.render('login', { msg })
+        }
     }
 
     static login(req, res){
@@ -51,14 +58,18 @@ class UserController {
                 req.session.user = {
                     name: data_login.username
                 }
-                //redirect ke home
+                res.redirect('/home')
             }else{
                 throw 'Wrong Password'
             }
         } )
         .catch( err => {
             //send error ke login form
-            res.send(err)
+            if(typeof(err) == typeof('')){
+                res.redirect(`/login?msg=${err}`)
+            }else{
+                res.send(err)
+            }
         } )
     }
 
@@ -68,7 +79,7 @@ class UserController {
         }
         User.findOne({
             where:{
-                "username": req.session.username
+                "username": req.session.user.name
             }
         })
         .then( result => {
@@ -76,9 +87,11 @@ class UserController {
             Like.create(newData)
         } )
         .then( result => {
+            res.send('berhasil ngelike')
             //redirect ke postingan itu
         } )
         .catch( err => {
+            res.send(err)
             //redirect ke postingan itu dengan message error
         } )
     }
@@ -89,7 +102,7 @@ class UserController {
         }
         User.findOne({
             where:{
-                "username": req.session.username
+                "username": req.session.user.name
             }
         })
         .then( result => {
@@ -97,17 +110,19 @@ class UserController {
             return Like.destroy({
                 where:{
                     [Op.and]:[
-                        {"photo_id": photo_id},
-                        {"user_id": user_id}
+                        {"photo_id": data.photo_id},
+                        {"user_id": data.user_id}
                     ]
                 }
             })
         } )
         .then( result => {
             //redirect ke postingan itu
+            res.send('berhasil unlike')
         } )
         .catch( err => {
             //redirect ke postingan itu dengan message error
+            res.send('error')
         } )
     }
 
@@ -118,7 +133,7 @@ class UserController {
         }
         User.findOne({
             where:{
-                "username": req.session.username
+                "username": req.session.user.name
             }
         })
         .then( result =>{
@@ -210,6 +225,7 @@ class UserController {
 
         } )
     }
+    
 }
 
 module.exports = UserController
