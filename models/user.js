@@ -1,6 +1,7 @@
 'use strict';
 const bcrypt = require('bcrypt')
-const saltRounds = 10;
+const saltRounds = 10
+// const hashing = require('../helper/hashing')
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
@@ -20,14 +21,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks:{
       beforeCreate: (instance, option) => {
-        bcrypt.hash(instance.password, saltRounds)
-        .then( result => {
-          console.log('hashing success')
-          instance.password = result
-        } )
-        .catch( err => {
-            console.log('error hashing password')
-        } )
+        return bcrypt.hash(instance.password, saltRounds)
+                .then( result => {
+                    instance.password = result
+                } )
+                .catch( err => {
+                    console.log('error hashing password')
+                } )
       }
     },
     sequelize

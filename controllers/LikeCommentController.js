@@ -1,8 +1,7 @@
 const { Photo, User, Like, Comment } = require('../models')
 
 class LikeCommentController {
-    static photoLike(req, res){
-        let photo_id = req.params.photo_id
+    static photoLike(photo_id){
         Like.findAll({
             where:{
                 "photo_id": photo_id
@@ -17,8 +16,7 @@ class LikeCommentController {
         } )
     }
 
-    static photoComment(req, res){
-        let photo_id = req.params.photo_id
+    static photoComment(photo_id){
         Comment.findAll({
             where:{
                 "photo_id": photo_id

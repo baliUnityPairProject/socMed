@@ -10,8 +10,9 @@ class photoController {
         .catch(err => {
             res.render(err)
         })
-
     }
+
+    static 
 }
 
 module.exports = photoController

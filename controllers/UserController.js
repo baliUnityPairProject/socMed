@@ -19,6 +19,7 @@ class UserController {
             res.redirect('/login')
         } )
         .catch( err => {
+            //send error message berdasarkan error validation
             res.send(err)
         } )
     }
@@ -47,13 +48,14 @@ class UserController {
         } )
         .then( result => {
             if(result){
-
+                //redirect ke user page
             }else{
-
+                throw 'Wrong Password'
             }
         } )
         .catch( err => {
-
+            //send error ke login form
+            res.send(err)
         } )
     }
 
@@ -65,10 +67,10 @@ class UserController {
 
         Like.create(newData)
         .then( result => {
-
+            //redirect ke postingan itu
         } )
         .catch( err => {
-
+            //redirect ke postingan itu dengan message error
         } )
     }
 
@@ -80,10 +82,21 @@ class UserController {
         }
         Comment.create(newData)
         .then( result => {
-
+            //redirect ke postingan itu
         } )
         .catch( err => {
+            //redirect ke postingan itu dengan message error
+        } )
+    }
 
+    static updateForm(req, res){
+        let user_id = req.params.id
+        User.findByPk(user_id)
+        .then( result => {
+            //render update form
+        } )
+        .catch( err => {
+            //something went wrong
         } )
     }
 
@@ -98,17 +111,52 @@ class UserController {
         User.update(newData, {
             where:{
                 "id": user_id
-            }
+            },
+            individualHooks: true
         })
         .then( result => {
-
+            //redirect ke user page
         } )
         .catch( err => {
-
+            //something went wrong
         } )
     }
 
-    
+    static addPhotoForm(req, res){
+        res.render('photoForm')
+    }
+
+    static addPhoto(req, res){
+        let newData = {
+            link: req.body.link,
+            user_id: Number(req.params.user_id)
+        }
+
+        Photo.create(newData)
+        .then( result => {
+            //redirect ke user page
+        } )
+        .catch( err => {
+            //something went wrong
+        } )
+    }
+
+    static deletePhoto(req, res){
+        let photo_id = req.params.photo_id
+        Photo.destroy({
+            where:{
+                "id":photo_id
+            }
+        })
+        .then( result => {
+            //redirect ke user page
+        } )
+        .catch( err => {
+            //something went wrong
+        } )
+    }
+
+
 }
 
 module.exports = UserController
