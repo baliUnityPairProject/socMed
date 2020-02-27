@@ -18,13 +18,13 @@ Router.get('/home', (req, res) => { res.render('home') })
 Router.post('/home', upload.single('addfoto'), photoController.addFoto)
 
 Router.get('/login', loginRegister.formLogin)
-Router.post('/login', loginRegister.login)
+// Router.post('/login', loginRegister.login)
 Router.get('/register', loginRegister.formRegister)
-Router.get('/logout', (req, res) => {
-    req.session.destroy(function (err) {
-        res.redirect('/movies')
-    })
-})
+// Router.get('/logout', (req, res) => {
+//     req.session.destroy(function (err) {
+//         res.redirect('/movies')
+//     })
+// })
 
 
 module.exports = Router
