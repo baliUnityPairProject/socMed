@@ -1,18 +1,59 @@
+const bcrypt = require('bcrypt')
 const { Photo, User, Like, Comment } = require('../models')
 
 class UserController {
-    static addForm(req, res){
+    static registerForm(req, res){
         res.render('addForm')
     }
 
-    static addUser(req, res){
-        let newData = req.body
+    static register(req, res){
+        let newData = {
+            username: req.body.username,
+            name: req.body.name,
+            password: req.body,
+            email: req.body.password,
+            gender: req.body.gender,
+        }
         User.create(newData)
         .then( result => {
             res.redirect('/login')
         } )
         .catch( err => {
             res.send(err)
+        } )
+    }
+
+    static loginForm(req, res){
+        res.render('./login-register/login')
+    }
+
+    static login(req, res){
+        let error = `Sorry you have not registered yet!`
+        let data_login = {
+            username: req.body.username,
+            password: req.body.password
+        }
+        User.findOne({
+            where:{
+                "username": data_login.username
+            }
+        })
+        .then( result => {
+            if(!result){
+                throw error
+            }else{
+                return bcrypt.compare(data_login.password, result.password)
+            }
+        } )
+        .then( result => {
+            if(result){
+
+            }else{
+
+            }
+        } )
+        .catch( err => {
+
         } )
     }
 
