@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
                     instance.password = result
                 } )
                 .catch( err => {
-                    console.log('error hashing password')
+                    throw err
                 } )
       }
     },

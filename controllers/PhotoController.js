@@ -6,6 +6,9 @@ class PhotoController {
             include: [User, Like, Comment]
         })
         .then( result => {
+            for(let i=0; i< result.length; i++){
+                result.numLike = result[i].Likes.length
+            }
             res.send(result)
             //render home
         } )
