@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt')
 const { Photo, User, Like, Comment } = require('../models')
+const Op = require('sequelize').Sequelize.Op
 
 class UserController {
     static registerForm(req, res){
-        res.render('addForm')
+        res.render('register')
     }
 
     static register(req, res){
@@ -25,11 +26,10 @@ class UserController {
     }
 
     static loginForm(req, res){
-        res.render('./login-register/login')
+        res.render('login')
     }
 
     static login(req, res){
-        let error = `Sorry you have not registered yet!`
         let data_login = {
             username: req.body.username,
             password: req.body.password
@@ -41,14 +41,17 @@ class UserController {
         })
         .then( result => {
             if(!result){
-                throw error
+                throw `Sorry you have not registered yet!`
             }else{
                 return bcrypt.compare(data_login.password, result.password)
             }
         } )
         .then( result => {
             if(result){
-                //redirect ke user page
+                req.session.user = {
+                    name: data_login.username
+                }
+                //redirect ke home
             }else{
                 throw 'Wrong Password'
             }
@@ -61,11 +64,45 @@ class UserController {
 
     static addLike(req, res){
         let newData = {
-            user_id: req.query.user_id,
-            photo_id: req.query.photo_id
+            photo_id: req.params.photo_id
         }
+        User.findOne({
+            where:{
+                "username": req.session.username
+            }
+        })
+        .then( result => {
+            newData.user_id = result.id
+            Like.create(newData)
+        } )
+        .then( result => {
+            //redirect ke postingan itu
+        } )
+        .catch( err => {
+            //redirect ke postingan itu dengan message error
+        } )
+    }
 
-        Like.create(newData)
+    static unLike(req, res){
+        let data = {
+            photo_id: Number(req.params.photo_id)
+        }
+        User.findOne({
+            where:{
+                "username": req.session.username
+            }
+        })
+        .then( result => {
+            data.user_id = result.id
+            return Like.destroy({
+                where:{
+                    [Op.and]:[
+                        {"photo_id": photo_id},
+                        {"user_id": user_id}
+                    ]
+                }
+            })
+        } )
         .then( result => {
             //redirect ke postingan itu
         } )
@@ -76,11 +113,18 @@ class UserController {
 
     static addComment(req, res){
         let newData = {
-            user_id: req.query.user_id,
-            photo_id: req.query.photo_id,
+            photo_id: req.params.photo_id,
             message: req.body.message
         }
-        Comment.create(newData)
+        User.findOne({
+            where:{
+                "username": req.session.username
+            }
+        })
+        .then( result =>{
+            newData.user_id = result.id
+            return Comment.create(newData)
+        } )
         .then( result => {
             //redirect ke postingan itu
         } )
@@ -156,7 +200,16 @@ class UserController {
         } )
     }
 
+    static deleteUser(req, res){
+        let user_id = req.params.user_id
+        User.destroy(user_id)
+        .then( result => {
 
+        } )
+        .catch( err => {
+
+        } )
+    }
 }
 
 module.exports = UserController

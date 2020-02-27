@@ -18,6 +18,17 @@ class PhotoController {
         } )
     }
 
+    static listPhotoById(req, res){
+        let photo_id = req.params.photo_id
+        Photo.findByPk(photo_id)
+        .then( result => {
+
+        } )
+        .catch( err => {
+            
+        } )
+    }
+
     static listPhotoUser(req, res){
         let user_id = req.params.user_id
         Photo.findAll({

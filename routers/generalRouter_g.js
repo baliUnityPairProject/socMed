@@ -1,5 +1,5 @@
-const loginRegister = require('../controller/logRegController')
-const photoController = require('../controller/lo')
+const loginRegister = require('../controllers/logRegController')
+// const photoController = require('../controller/lo')
 const express = require('express')
 const Router = express.Router()
 

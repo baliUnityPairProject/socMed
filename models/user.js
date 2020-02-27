@@ -34,9 +34,9 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   User.associate = function(models) {
-    User.hasMany( models.Photo, {foreignKey: 'user_id'} )
-    User.hasMany( models.Like, {foreignKey: 'user_id'} )
-    User.hasMany( models.Comment, {foreignKey: 'user_id'} )
+    User.hasMany( models.Photo, {foreignKey: 'user_id', onDelete: 'cascade'} )
+    User.hasMany( models.Like, {foreignKey: 'user_id', onDelete: 'cascade'} )
+    User.hasMany( models.Comment, {foreignKey: 'user_id', onDelete: 'cascade'} )
   };
   return User;
 };

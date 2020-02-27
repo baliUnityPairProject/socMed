@@ -23,7 +23,7 @@ class LoginRegister {
     }
 
     static formRegister(req, res) {
-        res.render('./login-register/login')
+        res.render('./login-register/register')
     }
     
     static register(req, res) {
