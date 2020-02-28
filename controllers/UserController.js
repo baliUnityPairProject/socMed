@@ -62,13 +62,9 @@ class UserController {
 
     static loginForm(req, res) {
         let msg = req.query.msg
-        if (req.session.user) {
-            res.send('harus logout dulu yaa')
-        } else {
-            res.render('login', {
-                msg
-            })
-        }
+        res.render('login', {
+            msg
+        })
     }
 
     static login(req, res) {
@@ -122,8 +118,7 @@ class UserController {
                 Like.create(newData)
             })
             .then(result => {
-                res.send('berhasil ngelike')
-                //redirect ke postingan itu
+                res.redirect(`/photos/${newData.photo_id}`)
             })
             .catch(err => {
                 res.send(err)
@@ -156,11 +151,12 @@ class UserController {
             })
             .then(result => {
                 //redirect ke postingan itu
-                res.send('berhasil unlike')
+                res.redirect(`/photos/${newData.photo_id}`)
             })
             .catch(err => {
                 //redirect ke postingan itu dengan message error
-                res.send('error')
+                // res.send('error')
+                res.redirect(`/photos/${newData.photo_id}`)
             })
     }
 
@@ -180,8 +176,10 @@ class UserController {
             })
             .then(result => {
                 //redirect ke postingan itu
+                res.redirect(`/photos/${newData.photo_id}`)
             })
             .catch(err => {
+                res.send(err)
                 //redirect ke postingan itu dengan message error
             })
     }

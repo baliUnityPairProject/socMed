@@ -7,9 +7,11 @@ class PhotoController {
         })
         .then( result => {
             for(let i=0; i< result.length; i++){
-                result.numLike = result[i].Likes.length
+                result[i].numLike = result[i].Likes.length
+                result[i].numComment = result[i].Comments.length
             }
-            res.render('home')
+            // res.send(result)
+            res.render('home', { data: result })
         } )
         .catch( err => {
             res.send(err)
@@ -22,6 +24,7 @@ class PhotoController {
         let data_photo
         let data_like
         let data_comment
+        let data_user
         Photo.findByPk(photo_id, {
             include: User
         })
@@ -36,6 +39,7 @@ class PhotoController {
         .then( result => {
             data_like = result
             return Comment.findAll({
+                include: User,
                 where:{
                     "photo_id": photo_id
                 }
@@ -43,8 +47,15 @@ class PhotoController {
         } )
         .then( result => {
             data_comment = result
-            let all_data = [data_photo, data_like, data_comment]
-            res.send(all_data)
+            return User.findAll({
+                where:{
+                    "username":req.session.user.name
+                }
+            })
+        } )
+        .then( result => {
+            data_user = result[0]
+            res.render('detail', { data_photo, data_like, data_comment, data_user })
         } )
         .catch( err => {
             res.send('err')
