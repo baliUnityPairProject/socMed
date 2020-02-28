@@ -1,5 +1,7 @@
 const express = require('express')
 const Router = express.Router()
+const multer = require('multer')
+const upload = multer({dest: 'uploads/'})
 
 const PhotoController = require('../controllers/PhotoController')
 const UserController = require('../controllers/UserController')
@@ -27,6 +29,8 @@ Router.post('/photos/:photo_id/add-comment', checkLogin, UserController.addComme
 
 Router.get('/photos/:photo_id/add-like', checkLogin, UserController.addLike)
 Router.get('/photos/:photo_id/un-like', checkLogin, UserController.unLike)
+
+Router.post('/photos/add', checkLogin, upload.single('addfoto'), UserController.addPhoto)
 
 //Kurang add photo oleh user
 

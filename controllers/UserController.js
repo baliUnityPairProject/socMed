@@ -72,6 +72,7 @@ class UserController {
             username: req.body.username,
             password: req.body.password
         }
+        let id
         User.findOne({
                 where: {
                     "username": data_login.username
@@ -81,12 +82,14 @@ class UserController {
                 if (!result) {
                     throw `Sorry you have not registered yet!`
                 } else {
+                    id = result.id
                     return bcrypt.compare(data_login.password, result.password)
                 }
             })
             .then(result => {
                 if (result) {
                     req.session.user = {
+                        "id": id,
                         name: data_login.username
                     }
                     res.redirect('/home')
@@ -151,12 +154,12 @@ class UserController {
             })
             .then(result => {
                 //redirect ke postingan itu
-                res.redirect(`/photos/${newData.photo_id}`)
+                res.redirect(`/photos/${data.photo_id}`)
             })
             .catch(err => {
                 //redirect ke postingan itu dengan message error
                 // res.send('error')
-                res.redirect(`/photos/${newData.photo_id}`)
+                res.redirect(`/photos/${data.photo_id}`)
             })
     }
 
@@ -217,20 +220,21 @@ class UserController {
             })
     }
 
-    static addPhotoForm(req, res) {
-        res.render('photoForm')
-    }
+    // static addPhotoForm(req, res) {
+    //     res.render('photoForm')
+    // }
 
     static addPhoto(req, res) {
         let newData = {
-            link: req.body.link,
+            link: req.file.path,
             description: req.body.description,
-            user_id: Number(req.params.user_id)
+            user_id: req.session.user.id
         }
+        console.log(newData)
 
         Photo.create(newData)
             .then(result => {
-                //redirect ke user page
+                res.redirect('/home')
             })
             .catch(err => {
                 //something went wrong

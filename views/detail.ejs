@@ -265,17 +265,17 @@
                                 <% }%>
                             <% } %>
                             <% if(!flag){ %>
-                                <button>
-                                    <a href="/photos/<%= data_photo.id %>/add-like">
+                                <a href="/photos/<%= data_photo.id %>/add-like">
+                                    <button>
                                         <i class="fas fa-thumbs-up"></i> <%= data_like.length %>
-                                    </a>
-                                </button>
+                                    </button>
+                                </a>
                             <% }else{ %>
-                                <button>
                                     <a href="/photos/<%= data_photo.id %>/un-like">
-                                         <i class="fas fa-thumbs-down"></i> <%= data_like.length %>
+                                        <button>
+                                            <i class="fas fa-thumbs-down"></i> <%= data_like.length %>
+                                        </button>
                                     </a>
-                                </button>
                             <% } %>
                             <!--BOOKMARK-->
                             <button>
@@ -306,7 +306,7 @@
                 <tbody>
                     <% for(let i=0; i<data_comment.length; i++){ %>
                         <tr>
-                            <td class="text-left"><strong><%= data_comment[i].User.username %></strong> => <%= data_comment[i].message %>
+                            <td class="text-left"><strong><%= data_comment[i].User.getCommentName() %></strong> => <%= data_comment[i].message %>
                             </td>
                         </tr>
                     <% } %>

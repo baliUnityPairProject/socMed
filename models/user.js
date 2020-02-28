@@ -6,7 +6,11 @@ const saltRounds = 10
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
 
-  class User extends Model {}
+  class User extends Model {
+    getCommentName(){
+      return `${this.name} as ${this.username} says:`
+    }
+  }
 
   User.init({
     username: {

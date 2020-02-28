@@ -94,10 +94,10 @@
             <li class="card" style="border-radius: 10%;">
                 <a class="card-image" style="border-radius:10%;" href="/photos/<%= data[i].id %>"
                     style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/310408/jane-doe-100.jpg);"
-                    data-image-full="<%= data[i].link %>">
-                    <img src="<%= data[i].link %>" alt="<%= data[i].User.username %>"/>
+                    data-image-full="/<%= data[i].link %>">
+                    <img src="/<%= data[i].link %>" alt="<%= data[i].User.username %>"/>
                 </a>
-                <a class="card-description" href="">
+                <a class="card-description" href="/photos/<%= data[i].id %>">
                     <div class="container text-left" style="padding-left: 10px;">
                         <i class="far fa-heart"> <%= data[i].numLike %></i>
                         <i class="far fa-comment" style="position: relative; left: 10px;"> <%= data[i].numComment %></i>
