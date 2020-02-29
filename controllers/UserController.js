@@ -33,7 +33,7 @@ class UserController {
                     service: 'gmail',
                     auth: {
                         user: 'lnvavnl@gmail.com', // generated ethereal user
-                        pass: 'wewwew123' // generated ethereal password
+                        pass: '-silahkan isi password-' // generated ethereal password
                     }
                 });
 
